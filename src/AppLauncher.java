@@ -1,5 +1,7 @@
 import javax.swing.SwingUtilities;
 
+import Gui.LoginPage;
+
 public class AppLauncher {
         public static void main(String[] args) {
 
@@ -8,7 +10,7 @@ public class AppLauncher {
                 @Override
                 public void run() {
                     // Launch the first Gui
-                    
+                    new LoginPage().setVisible(true);
                 }
             });
         }

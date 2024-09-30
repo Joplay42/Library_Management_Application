@@ -20,7 +20,7 @@ public abstract class BaseFrame extends JFrame{
         setTitle(title);
 
         // Set the size
-        setSize(420, 600);
+        setSize(1080, 720);
 
         // Prevent the program to not fully close
         setDefaultCloseOperation(EXIT_ON_CLOSE);
