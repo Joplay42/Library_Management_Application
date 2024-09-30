@@ -1,12 +1,18 @@
 package Gui;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import Obj.MyJDBC;
+import Obj.User;
 
 public class LoginPage extends BaseFrame{
 
@@ -53,6 +59,25 @@ public class LoginPage extends BaseFrame{
         JButton logInButton = new JButton("Log in");
         logInButton.setBounds(60,600,getWidth() - 120,40);
         logInButton.setFont(new Font("Dialog", Font.PLAIN, 24));
+
+        // Add event when clicked
+        logInButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = userNameTextField.getText();
+                String password = String.valueOf(passwordField.getPassword());
+
+                User user = MyJDBC.validateLogin(username, password);
+
+                if (user != null) {
+                    JOptionPane.showMessageDialog(logInButton, "User has been found!");
+                } else {
+                    JOptionPane.showMessageDialog(logInButton, "ERROR : User has not been found...");
+                }
+            }
+            
+        });
+
         add(logInButton);
     }
     
