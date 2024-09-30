@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'com.example' // Update with your group ID
+version '1.0-SNAPSHOT' // Update with your project version
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation files('lib/java-dotenv-5.2.2.jar')
+    implementation files('lib/kotlin-stdlib-1.6.21.jar')
+    implementation files('lib/mysql-connector-j-9.0.0.jar')
+    implementation files('lib/bcrypt-0.10.2-javadoc.jar')
+}
+
+// Optional: Configure the Java version
+sourceCompatibility = '1.8' // Change this to the version you are using
+targetCompatibility = '1.8'
