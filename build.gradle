@@ -13,7 +13,7 @@ dependencies {
     implementation files('lib/java-dotenv-5.2.2.jar')
     implementation files('lib/kotlin-stdlib-1.6.21.jar')
     implementation files('lib/mysql-connector-j-9.0.0.jar')
-    implementation files('lib/bcrypt-0.10.2-javadoc.jar')
+    implementation 'com.password4j:password4j:1.8.2'
 }
 
 // Optional: Configure the Java version

@@ -1,6 +1,7 @@
 import javax.swing.SwingUtilities;
 
 import Gui.LoginPage;
+import Gui.RegisterPage;
 
 public class AppLauncher {
         public static void main(String[] args) {
@@ -10,7 +11,8 @@ public class AppLauncher {
                 @Override
                 public void run() {
                     // Launch the first Gui
-                    new LoginPage().setVisible(true);
+                    // new LoginPage().setVisible(true);
+                    new RegisterPage().setVisible(true);
                 }
             });
         }
