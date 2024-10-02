@@ -2,6 +2,7 @@ package library_management;
 
 import javax.swing.SwingUtilities;
 
+import library_management.Gui.LoginPage;
 import library_management.Gui.RegisterPage;
 
 public class AppLauncher {
@@ -12,8 +13,8 @@ public class AppLauncher {
                 @Override
                 public void run() {
                     // Launch the first Gui
-                    // new LoginPage().setVisible(true);
-                    new RegisterPage().setVisible(true);
+                    new LoginPage().setVisible(true);
+                    // new RegisterPage().setVisible(true);
                 }
             });
         }

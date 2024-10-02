@@ -24,27 +24,28 @@ public class MyJDBC {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
             PreparedStatement loginQuery = connection.prepareStatement(
-                "SELECT * FROM users WHERE username=? AND password=?"
+                "SELECT * FROM users WHERE username=?"
             );
 
             loginQuery.setString(1, username);
-            loginQuery.setString(2, password);
 
             ResultSet resultSet = loginQuery.executeQuery();
 
             if (resultSet.next()) {
-                // Storage database from object
-                int id = resultSet.getInt("id");
-                String email = resultSet.getString("email");
-                String phone = resultSet.getString("phone");
+                if (checkPassword(password, resultSet.getString("password"))) {
+                    // Storage database from object
+                    int id = resultSet.getInt("id");
+                    String email = resultSet.getString("email");
+                    String phone = resultSet.getString("phone");
 
-                // Conversion String to Permission
-                String permissionString = resultSet.getString("permission");
-                Permission permission = Permission.valueOf(permissionString);
-                Date account_created = resultSet.getDate("account_created");
+                    // Conversion String to Permission
+                    String permissionString = resultSet.getString("permission");
+                    Permission permission = Permission.valueOf(permissionString);
+                    Date account_created = resultSet.getDate("account_created");
 
-                // Return user logged in object
-                return new User(id, username, email, password, phone, permission, account_created);
+                    // Return user logged in object
+                    return new User(id, username, email, password, phone, permission, account_created);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,7 +63,8 @@ public class MyJDBC {
                 );
                 newUserQuery.setString(1, username);
                 newUserQuery.setString(2, email);
-                newUserQuery.setString(3, password);
+                String encryptPassword = encryptPassword(password);
+                newUserQuery.setString(3, encryptPassword);
                 newUserQuery.setString(4, phone);
                 newUserQuery.setString(5, "user");
 
@@ -135,6 +137,10 @@ public class MyJDBC {
     }
 
     public static String encryptPassword(String password) {
-        return Password.hash(password).withArgon2().getResult();
+        return Password.hash(password).withBcrypt().getResult();
+    }
+
+    public static boolean checkPassword(String password, String encryptedPassword) {
+        return Password.check(password, encryptedPassword).withBcrypt();
     }
 }
