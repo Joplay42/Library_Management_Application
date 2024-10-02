@@ -70,7 +70,9 @@ public class LoginPage extends BaseFrame{
                 User user = MyJDBC.validateLogin(username, password);
 
                 if (user != null) {
-                    JOptionPane.showMessageDialog(logInButton, "User has been found!");
+                    LoginPage.this.dispose();
+                    LibraryApp libraryApp = new LibraryApp("Library management app", user);
+                    libraryApp.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(logInButton, "ERROR : User has not been found...");
                 }

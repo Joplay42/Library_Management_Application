@@ -2,14 +2,23 @@ package library_management.Gui;
 
 import javax.swing.JFrame;
 
+import library_management.Obj.User;
+
 /*
  * This method is the baseFrame of the project which will create the windows for the 
  * interface to display on. 
  */
 public abstract class BaseFrame extends JFrame{
 
+    protected User user;
+
     // Public constructor which passes the title of the baseFrame
     public BaseFrame(String title) {
+        initialize(title);
+    }
+
+    public BaseFrame(String title, User user) {
+        this.user = user;
         initialize(title);
     }
 
