@@ -12,9 +12,12 @@ public class User {
     private Permission permission;
     private Date account_created;
 
+<<<<<<< HEAD
     // Default constructor
     public User() {}
 
+=======
+>>>>>>> 282cc6f (Graddle build)
     // Constructor of User
     public User(int id, String username, String email, String password, String phone, Permission permission, Date account_created) {
         this.id = id;
@@ -26,6 +29,7 @@ public class User {
         this.account_created = account_created;
     }
 
+<<<<<<< HEAD
     @Override
     public String toString() {
         return "id : " + id + "\n" +
@@ -37,6 +41,8 @@ public class User {
             "Account_created : " + account_created;
     }
 
+=======
+>>>>>>> 282cc6f (Graddle build)
     /**
      * @return int return the id
      */
@@ -135,8 +141,11 @@ public class User {
         this.account_created = account_created;
     }
 
+<<<<<<< HEAD
     public boolean isEmpty() {
         return (this.id == 0) && (this.username == null || this.username.isEmpty()) && (this.email == null || this.email.isEmpty());
     }
 
+=======
+>>>>>>> 282cc6f (Graddle build)
 }

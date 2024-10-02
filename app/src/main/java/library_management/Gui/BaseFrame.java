@@ -1,10 +1,13 @@
 package library_management.Gui;
 
 import javax.swing.JFrame;
+<<<<<<< HEAD
 import java.util.List;
 
 import library_management.Obj.Book;
 import library_management.Obj.User;
+=======
+>>>>>>> 282cc6f (Graddle build)
 
 /*
  * This method is the baseFrame of the project which will create the windows for the 
@@ -12,14 +15,18 @@ import library_management.Obj.User;
  */
 public abstract class BaseFrame extends JFrame{
 
+<<<<<<< HEAD
     protected User user;
     protected List<Book> bookList;
 
+=======
+>>>>>>> 282cc6f (Graddle build)
     // Public constructor which passes the title of the baseFrame
     public BaseFrame(String title) {
         initialize(title);
     }
 
+<<<<<<< HEAD
     public BaseFrame(String title, User user) {
         this.user = user;
         initialize(title);
@@ -31,6 +38,8 @@ public abstract class BaseFrame extends JFrame{
         initialize(title);
     }
 
+=======
+>>>>>>> 282cc6f (Graddle build)
     // This method initializes the BaseFrame with multiple parameter of the window
     private void initialize(String title) {
 

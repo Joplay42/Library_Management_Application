@@ -11,9 +11,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+<<<<<<< HEAD
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+=======
+>>>>>>> 282cc6f (Graddle build)
 import library_management.Obj.MyJDBC;
 import library_management.Obj.User;
 
@@ -60,7 +63,11 @@ public class LoginPage extends BaseFrame{
 
         // Create Login button
         JButton logInButton = new JButton("Log in");
+<<<<<<< HEAD
         logInButton.setBounds(60,550,getWidth() - 120,40);
+=======
+        logInButton.setBounds(60,600,getWidth() - 120,40);
+>>>>>>> 282cc6f (Graddle build)
         logInButton.setFont(new Font("Dialog", Font.PLAIN, 24));
 
         // Add event when clicked
@@ -73,17 +80,24 @@ public class LoginPage extends BaseFrame{
                 User user = MyJDBC.validateLogin(username, password);
 
                 if (user != null) {
+<<<<<<< HEAD
                     LoginPage.this.dispose();
                     LibraryApp libraryApp = new LibraryApp("Library management app", user);
                     libraryApp.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(LoginPage.this, "ERROR : User has not been found...");
+=======
+                    JOptionPane.showMessageDialog(logInButton, "User has been found!");
+                } else {
+                    JOptionPane.showMessageDialog(logInButton, "ERROR : User has not been found...");
+>>>>>>> 282cc6f (Graddle build)
                 }
             }
             
         });
 
         add(logInButton);
+<<<<<<< HEAD
 
         JLabel registerLabel = new JLabel("<html><a href=\"#\">Dont have an account? Register here</a></html>");
         registerLabel.setBounds(0, 600, getWidth(), 40);
@@ -98,6 +112,8 @@ public class LoginPage extends BaseFrame{
                 new RegisterPage().setVisible(true);
             }
         });
+=======
+>>>>>>> 282cc6f (Graddle build)
     }
     
 }

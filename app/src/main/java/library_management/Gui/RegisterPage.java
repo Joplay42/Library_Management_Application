@@ -2,8 +2,11 @@ package library_management.Gui;
 
 import java.awt.Font;
 
+<<<<<<< HEAD
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+=======
+>>>>>>> 282cc6f (Graddle build)
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -20,21 +23,27 @@ import java.awt.event.ActionEvent;
 
 public class RegisterPage extends BaseFrame {
 
+<<<<<<< HEAD
     /**
      * 
      * Here is the default constructor which herits from the baseFrame title
      * 
      */
+=======
+>>>>>>> 282cc6f (Graddle build)
     public RegisterPage() {
         super("Library management system - Register");
     }
 
+<<<<<<< HEAD
     /**
      * 
      * This abstract method is used to add component to a page. You can add each
      * component you want to your window.
      * 
     */
+=======
+>>>>>>> 282cc6f (Graddle build)
     @Override
     protected void addComponent() {
 
@@ -95,7 +104,11 @@ public class RegisterPage extends BaseFrame {
         
         // Create Login button
         JButton logInButton = new JButton("Create account");
+<<<<<<< HEAD
         logInButton.setBounds(60,550,getWidth() - 120,40);
+=======
+        logInButton.setBounds(60,600,getWidth() - 120,40);
+>>>>>>> 282cc6f (Graddle build)
         logInButton.setFont(new Font("Dialog", Font.PLAIN, 24));
 
         // Add event when clicked
@@ -103,12 +116,16 @@ public class RegisterPage extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+<<<<<<< HEAD
                 // FIELD - the fild for the users when it will be created
+=======
+>>>>>>> 282cc6f (Graddle build)
                 String username = userNameTextField.getText();
                 String phone = phoneTextField.getText();
                 String email = emailTextField.getText();
                 String password = String.valueOf(passwordField.getPassword());
 
+<<<<<<< HEAD
                 // VALIDATION - check is username, email, phone or password is empty
                 if (inputValidation(username, email, phone, password)) {
                     // VALIDATION - check if the email is already in use in the database
@@ -139,6 +156,26 @@ public class RegisterPage extends BaseFrame {
                     }
                 } else {
                     // DEBUG - show an error message
+=======
+                if (inputValidation(username, email, phone, password)) {
+                    if (!MyJDBC.emailAlreadyInUse(email)) {
+                        if (!MyJDBC.phoneNumberAlreadyInUse(phone)) {
+                            if (MyJDBC.registerNewUser(username, password, email, phone)) {
+                                RegisterPage.this.dispose();
+                                LoginPage loginPage = new LoginPage();
+                                loginPage.setVisible(true);
+                                JOptionPane.showMessageDialog(loginPage, "User created successfully!");
+                            } else {
+                                JOptionPane.showMessageDialog(logInButton, "ERROR : User already exist with this username");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : Phone number is already in use...");    
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : Email is already in use...");
+                    }
+                } else {
+>>>>>>> 282cc6f (Graddle build)
                     JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : All field must have a value...");
                 }
             }
@@ -147,6 +184,7 @@ public class RegisterPage extends BaseFrame {
 
         add(logInButton);
 
+<<<<<<< HEAD
         // LABEL - to log in to your account if you already have one
         JLabel registerLabel = new JLabel("<html><a href=\"#\">Already have an account? Log in</a></html>");
         registerLabel.setBounds(0, 600, getWidth(), 40);
@@ -178,6 +216,10 @@ public class RegisterPage extends BaseFrame {
      * @return a boolean if the validation is complete
      * 
      **/
+=======
+    }
+
+>>>>>>> 282cc6f (Graddle build)
     private Boolean inputValidation(String username, String email, String phone, String password) {
         if (username.length() == 0 || email.length() == 0 || phone.length() == 0 || password.length() == 0) return false;
     

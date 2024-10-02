@@ -1,7 +1,16 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 282cc6f (Graddle build)
 # Ignore Gradle project-specific cache directory
 .gradle
 
 # Ignore Gradle build output directory
 build
 
+<<<<<<< HEAD
+=======
+>>>>>>> 78e3a04 (Graddle build)
+>>>>>>> 282cc6f (Graddle build)
 .env

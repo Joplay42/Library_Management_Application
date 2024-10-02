@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "java.project.sourcePaths": ["lib", "src"],
   "java.project.outputPath": "bin",
   "java.project.referencedLibraries": [
@@ -6,5 +7,7 @@
     "c:\\Programmation\\Language\\Java\\Library_Management_Application\\lib\\java-dotenv-5.2.2.jar",
     "c:\\Programmation\\Language\\Java\\Library_Management_Application\\lib\\mysql-connector-j-9.0.0.jar"
   ],
+=======
+>>>>>>> 78e3a04 (Graddle build)
   "java.configuration.updateBuildConfiguration": "interactive"
 }

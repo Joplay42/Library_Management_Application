@@ -1,6 +1,9 @@
 package library_management.Obj;
 
+<<<<<<< HEAD
 import java.sql.Statement;
+=======
+>>>>>>> 282cc6f (Graddle build)
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,8 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
+=======
+>>>>>>> 282cc6f (Graddle build)
 
 import com.password4j.Password;
 
@@ -22,6 +28,7 @@ public class MyJDBC {
     private static final String DB_USERNAME = dotenv.get("DB_USERNAME");
     private static final String DB_PASSWORD = dotenv.get("DB_PASSWORD");
 
+<<<<<<< HEAD
     /**
      * 
      * This function is used to validate the login of a user by the username and
@@ -31,19 +38,30 @@ public class MyJDBC {
      * @param password
      * @return
      */
+=======
+>>>>>>> 282cc6f (Graddle build)
     public static User validateLogin(String username, String password) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
             PreparedStatement loginQuery = connection.prepareStatement(
+<<<<<<< HEAD
                 "SELECT * FROM users WHERE username=?"
             );
 
             loginQuery.setString(1, username);
+=======
+                "SELECT * FROM users WHERE username=? AND password=?"
+            );
+
+            loginQuery.setString(1, username);
+            loginQuery.setString(2, password);
+>>>>>>> 282cc6f (Graddle build)
 
             ResultSet resultSet = loginQuery.executeQuery();
 
             if (resultSet.next()) {
+<<<<<<< HEAD
                 if (checkPassword(password, resultSet.getString("password"))) {
                     // Storage database from object
                     int id = resultSet.getInt("id");
@@ -58,6 +76,20 @@ public class MyJDBC {
                     // Return user logged in object
                     return new User(id, username, email, password, phone, permission, account_created);
                 }
+=======
+                // Storage database from object
+                int id = resultSet.getInt("id");
+                String email = resultSet.getString("email");
+                String phone = resultSet.getString("phone");
+
+                // Conversion String to Permission
+                String permissionString = resultSet.getString("permission");
+                Permission permission = Permission.valueOf(permissionString);
+                Date account_created = resultSet.getDate("account_created");
+
+                // Return user logged in object
+                return new User(id, username, email, password, phone, permission, account_created);
+>>>>>>> 282cc6f (Graddle build)
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,6 +98,7 @@ public class MyJDBC {
         return null;
     }
 
+<<<<<<< HEAD
     /**
      * 
      * This method is used to register a new user in the database. It needs a username, 
@@ -94,6 +127,18 @@ public class MyJDBC {
                 newUserQuery.setString(2, email);
                 String encryptPassword = encryptPassword(password);
                 newUserQuery.setString(3, encryptPassword);
+=======
+    public static boolean registerNewUser(String username, String password, String email, String phone) {
+        try {
+            if (!userExist(username)) {
+                Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                PreparedStatement newUserQuery = connection.prepareStatement(
+                    "INSERT INTO users (username, email, password, phone, permission, account_created) VALUES (?, ?, ?, ?, ?, ?)"
+                );
+                newUserQuery.setString(1, username);
+                newUserQuery.setString(2, email);
+                newUserQuery.setString(3, password);
+>>>>>>> 282cc6f (Graddle build)
                 newUserQuery.setString(4, phone);
                 newUserQuery.setString(5, "user");
 
@@ -102,6 +147,7 @@ public class MyJDBC {
                 newUserQuery.setString(6, today);
 
                 newUserQuery.executeUpdate();
+<<<<<<< HEAD
 
                 ResultSet generatedKeys = newUserQuery.getGeneratedKeys();
                 if (generatedKeys.next()) {
@@ -115,11 +161,15 @@ public class MyJDBC {
                     user.setAccount_created(new Date());
                 }
                 return user;
+=======
+                return true;
+>>>>>>> 282cc6f (Graddle build)
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+<<<<<<< HEAD
         return user;
     }
 
@@ -132,6 +182,11 @@ public class MyJDBC {
      * @param userName
      * @return
      */
+=======
+        return false;
+    }
+
+>>>>>>> 282cc6f (Graddle build)
     public static boolean userExist(String userName) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -150,6 +205,7 @@ public class MyJDBC {
         return true;
     }
 
+<<<<<<< HEAD
     /**
      * 
      * This method is used if the email of an account is already in use. It returns a boolean,
@@ -158,6 +214,8 @@ public class MyJDBC {
      * @param email
      * @return
      */
+=======
+>>>>>>> 282cc6f (Graddle build)
     public static boolean emailAlreadyInUse(String email) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -176,6 +234,7 @@ public class MyJDBC {
         return true;
     }
 
+<<<<<<< HEAD
     /**
      * 
      * This method is used if the phone of an account is already in use. It returns a boolean,
@@ -184,6 +243,8 @@ public class MyJDBC {
      * @param phone
      * @return
      */
+=======
+>>>>>>> 282cc6f (Graddle build)
     public static boolean phoneNumberAlreadyInUse(String phone) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -202,6 +263,7 @@ public class MyJDBC {
         return true;
     }
 
+<<<<<<< HEAD
     /**
      * 
      * This method uses BCrypt to encrypt the password before it is stored
@@ -542,4 +604,9 @@ public class MyJDBC {
         return result;
     }
     
+=======
+    public static String encryptPassword(String password) {
+        return Password.hash(password).withArgon2().getResult();
+    }
+>>>>>>> 282cc6f (Graddle build)
 }

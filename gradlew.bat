@@ -13,8 +13,11 @@
 @rem See the License for the specific language governing permissions and
 @rem limitations under the License.
 @rem
+<<<<<<< HEAD
 @rem SPDX-License-Identifier: Apache-2.0
 @rem
+=======
+>>>>>>> 78e3a04 (Graddle build)
 
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
