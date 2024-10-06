@@ -2,6 +2,8 @@ package library_management.Gui;
 
 import java.awt.Font;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -82,7 +84,7 @@ public class RegisterPage extends BaseFrame {
         
         // Create Login button
         JButton logInButton = new JButton("Create account");
-        logInButton.setBounds(60,600,getWidth() - 120,40);
+        logInButton.setBounds(60,550,getWidth() - 120,40);
         logInButton.setFont(new Font("Dialog", Font.PLAIN, 24));
 
         // Add event when clicked
@@ -104,7 +106,7 @@ public class RegisterPage extends BaseFrame {
                                 loginPage.setVisible(true);
                                 JOptionPane.showMessageDialog(loginPage, "User created successfully!");
                             } else {
-                                JOptionPane.showMessageDialog(logInButton, "ERROR : User already exist with this username");
+                                JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : User already exist with this username");
                             }
                         } else {
                             JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : Phone number is already in use...");    
@@ -120,6 +122,20 @@ public class RegisterPage extends BaseFrame {
         });
 
         add(logInButton);
+
+        JLabel registerLabel = new JLabel("<html><a href=\"#\">Already have an account? Log in</a></html>");
+        registerLabel.setBounds(0, 600, getWidth(), 40);
+        registerLabel.setFont(new Font("dialog", Font.PLAIN, 24));
+        registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(registerLabel);
+
+        registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                RegisterPage.this.dispose();
+                new LoginPage().setVisible(true);
+            }
+        });
 
     }
 

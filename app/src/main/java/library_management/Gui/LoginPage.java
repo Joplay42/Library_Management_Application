@@ -11,6 +11,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import library_management.Obj.MyJDBC;
 import library_management.Obj.User;
 
@@ -57,7 +60,7 @@ public class LoginPage extends BaseFrame{
 
         // Create Login button
         JButton logInButton = new JButton("Log in");
-        logInButton.setBounds(60,600,getWidth() - 120,40);
+        logInButton.setBounds(60,550,getWidth() - 120,40);
         logInButton.setFont(new Font("Dialog", Font.PLAIN, 24));
 
         // Add event when clicked
@@ -74,13 +77,27 @@ public class LoginPage extends BaseFrame{
                     LibraryApp libraryApp = new LibraryApp("Library management app", user);
                     libraryApp.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(logInButton, "ERROR : User has not been found...");
+                    JOptionPane.showMessageDialog(LoginPage.this, "ERROR : User has not been found...");
                 }
             }
             
         });
 
         add(logInButton);
+
+        JLabel registerLabel = new JLabel("<html><a href=\"#\">Dont have an account? Register here</a></html>");
+        registerLabel.setBounds(0, 600, getWidth(), 40);
+        registerLabel.setFont(new Font("dialog", Font.PLAIN, 24));
+        registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(registerLabel);
+
+        registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                LoginPage.this.dispose();
+                new RegisterPage().setVisible(true);
+            }
+        });
     }
     
 }
