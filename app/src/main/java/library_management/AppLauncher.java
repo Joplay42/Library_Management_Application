@@ -14,7 +14,7 @@ public class AppLauncher {
                 @Override
                 public void run() {
                     //new LoginPage().setVisible(true);
-                    new LibraryApp("Library_management app", new User(0, null, null, null, null, null, null)).setVisible(true);
+                    new LibraryApp("Library_management app", new User(0, "Jonathan", null, null, null, null, null)).setVisible(true);
                 }
             });
         }
