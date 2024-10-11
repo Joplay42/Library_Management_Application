@@ -20,10 +20,21 @@ import java.awt.event.ActionEvent;
 
 public class RegisterPage extends BaseFrame {
 
+    /**
+     * 
+     * Here is the default constructor which herits from the baseFrame title
+     * 
+     */
     public RegisterPage() {
         super("Library management system - Register");
     }
 
+    /**
+     * 
+     * This abstract method is used to add component to a page. You can add each
+     * component you want to your window.
+     * 
+    */
     @Override
     protected void addComponent() {
 
@@ -92,29 +103,41 @@ public class RegisterPage extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // FIELD - the fild for the users when it will be created
                 String username = userNameTextField.getText();
                 String phone = phoneTextField.getText();
                 String email = emailTextField.getText();
                 String password = String.valueOf(passwordField.getPassword());
 
+                // VALIDATION - check is username, email, phone or password is empty
                 if (inputValidation(username, email, phone, password)) {
+                    // VALIDATION - check if the email is already in use in the database
                     if (!MyJDBC.emailAlreadyInUse(email)) {
+                        // VALIDATION - check is the phoneNumber is already in use in the databse
                         if (!MyJDBC.phoneNumberAlreadyInUse(phone)) {
+                            // CREATION - create a new user if all the validation is false
                             if (MyJDBC.registerNewUser(username, password, email, phone)) {
+                                // DISPOSE
                                 RegisterPage.this.dispose();
+                                // SHOW - login page
                                 LoginPage loginPage = new LoginPage();
                                 loginPage.setVisible(true);
+                                // DEBUG - show a messageBox with a succesfull message
                                 JOptionPane.showMessageDialog(loginPage, "User created successfully!");
                             } else {
+                                // DEBUG - show an error message
                                 JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : User already exist with this username");
                             }
                         } else {
+                            // DEBUG - show an error message
                             JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : Phone number is already in use...");    
                         }
                     } else {
+                        // DEBUG - show an error message
                         JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : Email is already in use...");
                     }
                 } else {
+                    // DEBUG - show an error message
                     JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : All field must have a value...");
                 }
             }
@@ -123,12 +146,14 @@ public class RegisterPage extends BaseFrame {
 
         add(logInButton);
 
+        // LABEL - to log in to your account if you already have one
         JLabel registerLabel = new JLabel("<html><a href=\"#\">Already have an account? Log in</a></html>");
         registerLabel.setBounds(0, 600, getWidth(), 40);
         registerLabel.setFont(new Font("dialog", Font.PLAIN, 24));
         registerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(registerLabel);
 
+        // ACTION - when the link has been clicked it will open the long in page
         registerLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -139,6 +164,19 @@ public class RegisterPage extends BaseFrame {
 
     }
 
+    /**
+     * 
+     * This method is used right before the creation of a user. It validates if all the user
+     * input are not null so there is no error in the database with blank value
+     * 
+     * @param username the name of the user
+     * @param email the email of the user
+     * @param phone the phone number of the user
+     * @param password the password of the user
+     * 
+     * @return a boolean if the validation is complete
+     * 
+     **/
     private Boolean inputValidation(String username, String email, String phone, String password) {
         if (username.length() == 0 || email.length() == 0 || phone.length() == 0 || password.length() == 0) return false;
     

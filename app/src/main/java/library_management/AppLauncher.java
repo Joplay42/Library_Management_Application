@@ -2,8 +2,9 @@ package library_management;
 
 import javax.swing.SwingUtilities;
 
+import library_management.Gui.LibraryApp;
 import library_management.Gui.LoginPage;
-import library_management.Gui.RegisterPage;
+import library_management.Obj.User;
 
 public class AppLauncher {
         public static void main(String[] args) {
@@ -12,9 +13,8 @@ public class AppLauncher {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    // Launch the first Gui
-                    new LoginPage().setVisible(true);
-                    // new RegisterPage().setVisible(true);
+                    //new LoginPage().setVisible(true);
+                    new LibraryApp("Library_management app", new User(0, null, null, null, null, null, null)).setVisible(true);
                 }
             });
         }
