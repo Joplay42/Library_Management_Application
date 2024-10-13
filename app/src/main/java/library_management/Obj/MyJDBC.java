@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.cj.xdevapi.PreparableStatement;
 import com.password4j.Password;
 
 import io.github.cdimascio.dotenv.Dotenv;

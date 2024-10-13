@@ -1,7 +1,9 @@
 package library_management.Gui;
 
 import javax.swing.JFrame;
+import java.util.List;
 
+import library_management.Obj.Book;
 import library_management.Obj.User;
 
 /*
@@ -11,6 +13,7 @@ import library_management.Obj.User;
 public abstract class BaseFrame extends JFrame{
 
     protected User user;
+    protected List<Book> bookList;
 
     // Public constructor which passes the title of the baseFrame
     public BaseFrame(String title) {
@@ -19,6 +22,11 @@ public abstract class BaseFrame extends JFrame{
 
     public BaseFrame(String title, User user) {
         this.user = user;
+        initialize(title);
+    }
+
+    public BaseFrame(String title, List<Book> bookList) {
+        this.bookList = bookList;
         initialize(title);
     }
 

@@ -9,6 +9,8 @@ import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -22,6 +24,7 @@ import library_management.Obj.User;
 
 public class LibraryApp extends BaseFrame{
 
+    // Position global variable
     public static int PADDING_X = 40, PADDING_Y = 40;
 
     // Create an object list of book
@@ -77,18 +80,21 @@ public class LibraryApp extends BaseFrame{
         add(bookInformation);
         
         // Event when book is selected
-        displayBookList.addListSelectionListener(e -> {
-            Book selectedBook = displayBookList.getSelectedValue();
+        displayBookList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                Book selectedBook = displayBookList.getSelectedValue();
 
-            // Display book information
-            if (selectedBook != null) {
-                bookInformation.setText(
-                    "Title: " + selectedBook.getTitle() + "\n" +
-                    "Author: " + selectedBook.getAuthor() + "\n" +
-                    "isbn: " + selectedBook.getIsbn() + "\n" +
-                    "Published year: " + selectedBook.getPublished_year() + "\n" +
-                    "Available: " + selectedBook.isIs_available()
-                );
+                // Display book information
+                if (selectedBook != null) {
+                    bookInformation.setText(
+                        "Title: " + selectedBook.getTitle() + "\n" +
+                        "Author: " + selectedBook.getAuthor() + "\n" +
+                        "isbn: " + selectedBook.getIsbn() + "\n" +
+                        "Published year: " + selectedBook.getPublished_year() + "\n" +
+                        "Available: " + selectedBook.isIs_available()
+                    );
+                }    
             }
         });
 
@@ -97,6 +103,17 @@ public class LibraryApp extends BaseFrame{
             // Add books button
             JButton addButton = new JButton("Add books");
             addButton.setBounds(getWidth() - 450, getHeight() - 490, 400, 30);
+            // Add actionListener()
+            addButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Open the CreateBook gui
+                    LibraryApp.this.dispose();
+                    new CreateBook("Create a new book", bookList).setVisible(true);
+                }
+                
+            });
             add(addButton);
 
             // Delete books button
@@ -146,6 +163,11 @@ public class LibraryApp extends BaseFrame{
         add(rentButton);
     }
 
+    /**
+     * 
+     *  This funtion is used to show the data and to put it into a list
+     * 
+     */
     public static void showData() {
         // Fetch the data from database
         bookList = MyJDBC.fecthBook();
