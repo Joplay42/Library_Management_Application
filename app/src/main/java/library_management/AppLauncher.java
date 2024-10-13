@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 
 import library_management.Gui.LibraryApp;
 import library_management.Gui.LoginPage;
+import library_management.Obj.Permission;
 import library_management.Obj.User;
 
 public class AppLauncher {
@@ -14,7 +15,7 @@ public class AppLauncher {
                 @Override
                 public void run() {
                     //new LoginPage().setVisible(true);
-                    new LibraryApp("Library_management app", new User(0, "Jonathan", null, null, null, null, null)).setVisible(true);
+                    new LibraryApp("Library_management app", new User(0, "Jonathan", null, null, null, Permission.Admin, null)).setVisible(true);
                 }
             });
         }

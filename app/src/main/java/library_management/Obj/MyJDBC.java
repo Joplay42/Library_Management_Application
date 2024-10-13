@@ -247,4 +247,34 @@ public class MyJDBC {
 
         return null;
     }
+
+    /**
+     * 
+     * This method is used for the admin to delete the specified book in the list
+     * 
+     * @return
+     */
+    public static boolean deleteBook(Book book) {
+        
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement deleteIndex = connection.prepareStatement(
+                "DELETE FROM books WHERE title=?"
+            );
+            deleteIndex.setString(1, book.getTitle());
+
+            // Execute the query
+            int resultSet = deleteIndex.executeUpdate();
+
+            // Check if error 
+            if (resultSet > 0) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return false;
+    }
 }
