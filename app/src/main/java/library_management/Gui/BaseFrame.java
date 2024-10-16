@@ -25,8 +25,9 @@ public abstract class BaseFrame extends JFrame{
         initialize(title);
     }
 
-    public BaseFrame(String title, List<Book> bookList) {
+    public BaseFrame(String title, List<Book> bookList, User user) {
         this.bookList = bookList;
+        this.user = user;
         initialize(title);
     }
 

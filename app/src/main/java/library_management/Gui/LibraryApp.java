@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import library_management.Obj.Book;
 import library_management.Obj.MyJDBC;
 import library_management.Obj.Permission;
+import library_management.Obj.Transaction;
 import library_management.Obj.User;
 
 public class LibraryApp extends BaseFrame{
@@ -88,6 +89,7 @@ public class LibraryApp extends BaseFrame{
                 // Display book information
                 if (selectedBook != null) {
                     bookInformation.setText(
+                        "id: " + selectedBook.getId() + "\n" +
                         "Title: " + selectedBook.getTitle() + "\n" +
                         "Author: " + selectedBook.getAuthor() + "\n" +
                         "isbn: " + selectedBook.getIsbn() + "\n" +
@@ -99,7 +101,7 @@ public class LibraryApp extends BaseFrame{
         });
 
         // If admin 
-        if (user.getPermission() == Permission.Admin) {
+        if (user.getPermission() == Permission.admin) {
             // Add books button
             JButton addButton = new JButton("Add books");
             addButton.setBounds(getWidth() - 450, getHeight() - 490, 400, 30);
@@ -110,7 +112,7 @@ public class LibraryApp extends BaseFrame{
                 public void actionPerformed(ActionEvent e) {
                     // Open the CreateBook gui
                     LibraryApp.this.dispose();
-                    new CreateBook("Create a new book", bookList).setVisible(true);
+                    new CreateBook("Create a new book", bookList, user).setVisible(true);
                 }
                 
             });
@@ -160,6 +162,38 @@ public class LibraryApp extends BaseFrame{
         // Rent book button
         JButton rentButton = new JButton("Rent books");                                                                                                                                                 
         rentButton.setBounds(getWidth() - 450, getHeight() - 550, 400, 30);
+        rentButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (displayBookList.getSelectedIndex() != -1) {
+                    // Store temporarily the book
+                    Book book = displayBookList.getSelectedValue();
+                    // Confirmation message
+                    int response = JOptionPane.showConfirmDialog(
+                        null,
+                        "Is this selection right?\n" + book,
+                        "Confirm selection",
+                        JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (response == JOptionPane.YES_OPTION) {
+                        Transaction transaction = MyJDBC.addTransaction(user.getId(), book.getId());
+                        if (!transaction.isEmpty()) {
+                            // Display the transaction information
+                            JOptionPane.showMessageDialog(LibraryApp.this, transaction);
+                        } else {
+                            // Error message
+                            JOptionPane.showMessageDialog(LibraryApp.this, "An error occured...");
+                        }
+                    }
+                } else {
+                    // Error message
+                    JOptionPane.showMessageDialog(LibraryApp.this, "You must select a book to rent...");
+                }
+            }
+            
+        });
         add(rentButton);
     }
 

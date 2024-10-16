@@ -12,6 +12,9 @@ public class User {
     private Permission permission;
     private Date account_created;
 
+    // Default constructor
+    public User() {}
+
     // Constructor of User
     public User(int id, String username, String email, String password, String phone, Permission permission, Date account_created) {
         this.id = id;
@@ -21,6 +24,17 @@ public class User {
         this.phone = phone;
         this.permission = permission;
         this.account_created = account_created;
+    }
+
+    @Override
+    public String toString() {
+        return "id : " + id + "\n" +
+            "userName : " + username + "\n" +
+            "email : " + email + "\n" + 
+            "password : " + password + "\n" + 
+            "phone : " + phone + "\n" + 
+            "permission : " + permission + "\n" +
+            "Account_created : " + account_created;
     }
 
     /**
@@ -119,6 +133,10 @@ public class User {
      */
     public void setAccount_created(Date account_created) {
         this.account_created = account_created;
+    }
+
+    public boolean isEmpty() {
+        return (this.id == 0) && (this.username == null || this.username.isEmpty()) && (this.email == null || this.email.isEmpty());
     }
 
 }

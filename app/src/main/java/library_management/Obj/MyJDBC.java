@@ -1,5 +1,6 @@
 package library_management.Obj;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -77,12 +78,17 @@ public class MyJDBC {
      * @param phone
      * @return
      */
-    public static boolean registerNewUser(String username, String password, String email, String phone) {
+    public static User registerNewUser(String username, String password, String email, String phone) {
+
+        User user = new User();
+
         try {
             if (!userExist(username)) {
+                System.out.println("Test");
                 Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
                 PreparedStatement newUserQuery = connection.prepareStatement(
-                    "INSERT INTO users (username, email, password, phone, permission, account_created) VALUES (?, ?, ?, ?, ?, ?)"
+                    "INSERT INTO users (username, email, password, phone, permission, account_created) VALUES (?, ?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS
                 );
                 newUserQuery.setString(1, username);
                 newUserQuery.setString(2, email);
@@ -96,13 +102,25 @@ public class MyJDBC {
                 newUserQuery.setString(6, today);
 
                 newUserQuery.executeUpdate();
-                return true;
+
+                ResultSet generatedKeys = newUserQuery.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    user.setId(generatedId);
+                    user.setUsername(username);
+                    user.setPassword(encryptPassword);
+                    user.setEmail(email);
+                    user.setPhone(phone);
+                    user.setPermission(Permission.user);
+                    user.setAccount_created(new Date());
+                }
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return user;
     }
 
     /**
@@ -228,13 +246,14 @@ public class MyJDBC {
             List<Book> fetchedBooks = new ArrayList<>();
 
             while (resultSet.next()) {
+                int book_id = resultSet.getInt("book_id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
                 String isbn = resultSet.getString("isbn");
                 int published_year = resultSet.getInt("published_year");
                 boolean is_available = resultSet.getBoolean("is_available");
 
-                Book book = new Book(title, author, isbn, published_year, is_available);
+                Book book = new Book(book_id ,title, author, isbn, published_year, is_available);
 
                 fetchedBooks.add(book);
             }
@@ -275,5 +294,78 @@ public class MyJDBC {
         }
         
         return false;
+    }
+    
+    /**
+     * 
+     * This method is used to create a new book and to put it into the database with
+     * this right information typed by the user.
+     * 
+     * @param title
+     * @param author
+     * @param isbn
+     * @param published_year
+     * @return
+     */
+    public static Book createBook(String title, String author, String isbn, int published_year) {
+        Book book = new Book();
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement createBookQuery = connection.prepareStatement(
+                "INSERT INTO books (title, author, isbn, published_year, is_available) VALUES (?, ?, ?, ?, true)",
+                Statement.RETURN_GENERATED_KEYS
+            );
+            createBookQuery.setString(1, title);
+            createBookQuery.setString(2, author);
+            createBookQuery.setString(3, isbn);
+            createBookQuery.setInt(4, published_year);
+
+            createBookQuery.executeUpdate();
+
+            ResultSet generatedKeys = createBookQuery.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int generatedId = generatedKeys.getInt(1);
+                book.setId(generatedId);
+                book.setTitle(title);
+                book.setAuthor(author);
+                book.setIsbn(isbn);
+                book.setPublished_year(published_year);
+                book.setIs_available(true);
+            }
+            return book;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return book;
+    }
+
+    public static Transaction addTransaction(int user_id, int book_id) {
+        Transaction result = new Transaction(user_id, book_id);
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement createTransactionQuery = connection.prepareStatement(
+                "INSERT INTO transactions (user_id, book_id, borrow_date, return_date, actual_return_date) VALUES (?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
+            );
+            createTransactionQuery.setInt(1, user_id);
+            createTransactionQuery.setInt(2, book_id);
+            createTransactionQuery.setDate(3, result.getBorrow_date());
+            createTransactionQuery.setDate(4, result.getReturn_date());
+            createTransactionQuery.setDate(5, result.getActual_return_date());
+
+            createTransactionQuery.executeUpdate();
+
+            ResultSet generatedKeys = createTransactionQuery.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int generatedId = generatedKeys.getInt(1);
+                result.setTransaction_id(generatedId);
+            }
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

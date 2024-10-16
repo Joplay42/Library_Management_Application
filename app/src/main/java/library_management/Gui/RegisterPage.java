@@ -115,15 +115,16 @@ public class RegisterPage extends BaseFrame {
                     if (!MyJDBC.emailAlreadyInUse(email)) {
                         // VALIDATION - check is the phoneNumber is already in use in the databse
                         if (!MyJDBC.phoneNumberAlreadyInUse(phone)) {
+                            User user = MyJDBC.registerNewUser(username, password, email, phone);
                             // CREATION - create a new user if all the validation is false
-                            if (MyJDBC.registerNewUser(username, password, email, phone)) {
+                            if (!user.isEmpty()) {
                                 // DISPOSE
                                 RegisterPage.this.dispose();
                                 // SHOW - login page
                                 LoginPage loginPage = new LoginPage();
                                 loginPage.setVisible(true);
                                 // DEBUG - show a messageBox with a succesfull message
-                                JOptionPane.showMessageDialog(loginPage, "User created successfully!");
+                                JOptionPane.showMessageDialog(loginPage, user);
                             } else {
                                 // DEBUG - show an error message
                                 JOptionPane.showMessageDialog(RegisterPage.this, "ERROR : User already exist with this username");

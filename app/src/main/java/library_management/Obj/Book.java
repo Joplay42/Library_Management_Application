@@ -2,16 +2,19 @@ package library_management.Obj;
 
 public class Book {
 
-    private int id = 0;
+    private int book_id;
     private String title;
     private String author;
     private String isbn;
     private int published_year;
     private boolean is_available;
 
+    // Default constructor
+    public Book() {}
+
     // Constructor with parameter
-    public Book(String title, String author, String isbn, int published_year, boolean is_available) {
-        this.id = id++;
+    public Book(int book_id, String title, String author, String isbn, int published_year, boolean is_available) {
+        this.book_id = book_id;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -25,18 +28,22 @@ public class Book {
         return title + " - " + author;
     }
 
+    public boolean isEmpty() {
+        return (this.book_id == 0) && (this.title == null || this.title.isEmpty()) && (this.author == null || this.author.isEmpty());
+    }
+
     /**
      * @return int return the id
      */
     public int getId() {
-        return id;
+        return book_id;
     }
 
     /**
-     * @param id the id to set
+     * @param book_id the id to set
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int book_id) {
+        this.book_id = book_id;
     }
 
     /**
