@@ -94,7 +94,7 @@ public class LibraryApp extends BaseFrame{
                         "Author: " + selectedBook.getAuthor() + "\n" +
                         "isbn: " + selectedBook.getIsbn() + "\n" +
                         "Published year: " + selectedBook.getPublished_year() + "\n" +
-                        "Available: " + selectedBook.isIs_available()
+                        "Available: " + selectedBook.is_available()
                     );
                 }    
             }
@@ -169,23 +169,34 @@ public class LibraryApp extends BaseFrame{
                 if (displayBookList.getSelectedIndex() != -1) {
                     // Store temporarily the book
                     Book book = displayBookList.getSelectedValue();
-                    // Confirmation message
-                    int response = JOptionPane.showConfirmDialog(
-                        null,
-                        "Is this selection right?\n" + book,
-                        "Confirm selection",
-                        JOptionPane.YES_NO_OPTION
-                    );
+                    // Check if book is available
+                    if (book.is_available()) {
+                        // Confirmation message
+                        int response = JOptionPane.showConfirmDialog(
+                            null,
+                            "Is this selection right?\n" + book,
+                            "Confirm selection",
+                            JOptionPane.YES_NO_OPTION
+                        );
 
-                    if (response == JOptionPane.YES_OPTION) {
-                        Transaction transaction = MyJDBC.addTransaction(user.getId(), book.getId());
-                        if (!transaction.isEmpty()) {
-                            // Display the transaction information
-                            JOptionPane.showMessageDialog(LibraryApp.this, transaction);
-                        } else {
-                            // Error message
-                            JOptionPane.showMessageDialog(LibraryApp.this, "An error occured...");
+                        if (response == JOptionPane.YES_OPTION) {
+                            Transaction transaction = MyJDBC.addTransaction(user.getId(), book.getId());
+                            if (!transaction.isEmpty()) {
+                                MyJDBC.isBookAvailable(false, book.getId());
+                                // Display the transaction information
+                                JOptionPane.showMessageDialog(LibraryApp.this, (
+                                    "You rented : " + "\n" +
+                                    book.getTitle() + " - " + book.getAuthor() + "\n" +
+                                    "Due date : " + transaction.getReturn_date()
+                                ));
+                            } else {
+                                // Error message
+                                JOptionPane.showMessageDialog(LibraryApp.this, "An error occured...");
+                            }
                         }
+                    } else {
+                        // Error message
+                        JOptionPane.showMessageDialog(LibraryApp.this, "This book is not available...");    
                     }
                 } else {
                     // Error message

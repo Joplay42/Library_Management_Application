@@ -105,14 +105,14 @@ public class Book {
     /**
      * @return boolean return the is_available
      */
-    public boolean isIs_available() {
+    public boolean is_available() {
         return is_available;
     }
 
     /**
      * @param is_available the is_available to set
      */
-    public void setIs_available(boolean is_available) {
+    public void set_available(boolean is_available) {
         this.is_available = is_available;
     }
 

@@ -330,7 +330,7 @@ public class MyJDBC {
                 book.setAuthor(author);
                 book.setIsbn(isbn);
                 book.setPublished_year(published_year);
-                book.setIs_available(true);
+                book.set_available(true);
             }
             return book;
         } catch (SQLException e) {
@@ -340,6 +340,15 @@ public class MyJDBC {
         return book;
     }
 
+    /**
+     * 
+     * This method is used to create a transaction when a book is getting rented.
+     * It creates an object of transaction which is then stored in the database.
+     * 
+     * @param user_id
+     * @param book_id
+     * @return
+     */
     public static Transaction addTransaction(int user_id, int book_id) {
         Transaction result = new Transaction(user_id, book_id);
         try {
@@ -367,5 +376,20 @@ public class MyJDBC {
         }
 
         return result;
+    }
+
+    public static void isBookAvailable(boolean response, int index) {
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement changeAvailabilityQuery = connection.prepareStatement(
+               "UPDATE books SET is_available=? WHERE book_id=?"
+            );
+            changeAvailabilityQuery.setBoolean(1, response);
+            changeAvailabilityQuery.setInt(2, index);
+            changeAvailabilityQuery.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
