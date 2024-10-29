@@ -17,22 +17,23 @@ import javax.swing.JOptionPane;
 import java.util.List;
 import java.util.ArrayList;
 
+import library_management.Interfaces.Data;
 import library_management.Obj.Book;
 import library_management.Obj.MyJDBC;
 import library_management.Obj.Permission;
 import library_management.Obj.Transaction;
 import library_management.Obj.User;
 
-public class LibraryApp extends BaseFrame{
+public class LibraryApp extends BaseFrame implements Data{
 
     // Position global variable
-    public static int PADDING_X = 40, PADDING_Y = 40;
+    private static int PADDING_X = 40, PADDING_Y = 40;
 
     // Create an object list of book
-    public static List<Book> bookList = new ArrayList<>();
+    private static List<Book> bookList = new ArrayList<>();
     
     // Create the default list model
-    public static DefaultListModel<Book> l1 = new DefaultListModel<>();  
+    private static DefaultListModel<Book> listModel = new DefaultListModel<>();  
 
     public LibraryApp(String title, User user) {
         super(title, user);
@@ -54,10 +55,10 @@ public class LibraryApp extends BaseFrame{
         add(listLabel);
          
         // Fetch the data
-        showData();
+        DisplayData();
 
         // Create List component
-        JList<Book> displayBookList = new JList<Book>(l1);
+        JList<Book> displayBookList = new JList<Book>(listModel);
         displayBookList.setFont(new Font("Dialog", Font.PLAIN, 16));
 
         
@@ -141,7 +142,7 @@ public class LibraryApp extends BaseFrame{
                             if (MyJDBC.deleteBook(displayBookList.getSelectedValue())) {
                                 bookList.remove(displayBookList.getSelectedIndex());
                                 // Realtime database
-                                showData();
+                                DisplayData();
                             }
                         }
                     } else {
@@ -157,6 +158,16 @@ public class LibraryApp extends BaseFrame{
         // See rented book button
         JButton seeMoreButton = new JButton("See rented books");                                                                                                                                                 
         seeMoreButton.setBounds(getWidth() - 450, getHeight() - 590, 400, 30);
+        seeMoreButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open a new page
+                LibraryApp.this.dispose();
+                new RentedList("Rented books", user).setVisible(true);
+            }
+
+        });
         add(seeMoreButton);
 
         // Rent book button
@@ -166,6 +177,7 @@ public class LibraryApp extends BaseFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Check if a book is selected
                 if (displayBookList.getSelectedIndex() != -1) {
                     // Store temporarily the book
                     Book book = displayBookList.getSelectedValue();
@@ -180,15 +192,18 @@ public class LibraryApp extends BaseFrame{
                         );
 
                         if (response == JOptionPane.YES_OPTION) {
-                            Transaction transaction = MyJDBC.addTransaction(user.getId(), book.getId());
+                            // Create transaction object
+                            Transaction transaction = MyJDBC.addTransaction(user, book);
                             if (!transaction.isEmpty()) {
-                                MyJDBC.isBookAvailable(false, book.getId());
+                                MyJDBC.setAvailability(false, book.getId());
                                 // Display the transaction information
                                 JOptionPane.showMessageDialog(LibraryApp.this, (
                                     "You rented : " + "\n" +
                                     book.getTitle() + " - " + book.getAuthor() + "\n" +
                                     "Due date : " + transaction.getReturn_date()
                                 ));
+                                // Fetch the correct data
+                                DisplayData();
                             } else {
                                 // Error message
                                 JOptionPane.showMessageDialog(LibraryApp.this, "An error occured...");
@@ -208,19 +223,15 @@ public class LibraryApp extends BaseFrame{
         add(rentButton);
     }
 
-    /**
-     * 
-     *  This funtion is used to show the data and to put it into a list
-     * 
-     */
-    public static void showData() {
+    @Override
+    public void DisplayData() {
         // Fetch the data from database
         bookList = MyJDBC.fecthBook();
         // Clear the data
-        l1.clear();
+        listModel.clear();
         // Loop to add each data in the list
         for (Book book : bookList) {
-            l1.addElement(book);
+            listModel.addElement(book);
         }
     }
     

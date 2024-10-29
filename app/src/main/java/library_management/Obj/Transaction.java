@@ -1,25 +1,34 @@
 package library_management.Obj;
 
-
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 
 public class Transaction {
     private int transaction_id = 0;
-    private int user_id;
-    private int book_id;
+    private User user;
+    private Book book;
     private Date borrow_date;
     private Date return_date;
     private Date actual_return_date;
 
     public Transaction() {}
 
-    public Transaction(int user_id, int book_id) {
+    // Fetch transaction
+    public Transaction(int transaction_id, User user, Book book, Date borrow_date, Date return_date, Date actual_return_date) {
+        this.transaction_id = transaction_id;
+        this.user = user;
+        this.book = book;
+        this.return_date = return_date;
+        this.actual_return_date = actual_return_date;
+    }
+
+    // Create transaction
+    public Transaction(User user, Book book) {
         this.transaction_id = transaction_id++;
-        this.user_id = user_id;
-        this.book_id = book_id;
+        this.user = user;
+        this.book = book;
         this.borrow_date = new Date(System.currentTimeMillis());
-        this.return_date = returnDate(new Date(System.currentTimeMillis()));
+        this.return_date = returnDate(this.borrow_date);
         this.actual_return_date = null;
     }
 
@@ -32,16 +41,11 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "transaction_id : " + transaction_id + "\n" +
-            "user_id : " + user_id + "\n" +
-            "book_id : " + book_id + "\n" + 
-            "borrow_date : " + borrow_date + "\n" + 
-            "return_date : " + return_date + "\n" + 
-            "actual_return_date : " + actual_return_date;
+        return book.getTitle() + " - Due date : " + return_date;
     }
 
     public boolean isEmpty() {
-        return (this.transaction_id == 0) && (this.user_id == 0) && (this.book_id == 0) && 
+        return (this.transaction_id == 0) && (this.user.isEmpty()) && (this.book.isEmpty()) && 
                (this.borrow_date == null) && (this.return_date == null) && (this.actual_return_date == null);
     }
 
@@ -62,29 +66,29 @@ public class Transaction {
     /**
      * @return int return the user_id
      */
-    public int getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
     /**
-     * @param user_id the user_id to set
+     * @param user the user_id to set
      */
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
      * @return int return the book_id
      */
-    public int getBook_id() {
-        return book_id;
+    public Book getBook() {
+        return book;
     }
 
     /**
-     * @param book_id the book_id to set
+     * @param book the book_id to set
      */
-    public void setBook_id(int book_id) {
-        this.book_id = book_id;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     /**

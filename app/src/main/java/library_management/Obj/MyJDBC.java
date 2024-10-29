@@ -349,19 +349,24 @@ public class MyJDBC {
      * @param book_id
      * @return
      */
-    public static Transaction addTransaction(int user_id, int book_id) {
-        Transaction result = new Transaction(user_id, book_id);
+    public static Transaction addTransaction(User user, Book book) {
+        Transaction result = new Transaction(user, book);
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement createTransactionQuery = connection.prepareStatement(
                 "INSERT INTO transactions (user_id, book_id, borrow_date, return_date, actual_return_date) VALUES (?, ?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             );
-            createTransactionQuery.setInt(1, user_id);
-            createTransactionQuery.setInt(2, book_id);
-            createTransactionQuery.setDate(3, result.getBorrow_date());
-            createTransactionQuery.setDate(4, result.getReturn_date());
-            createTransactionQuery.setDate(5, result.getActual_return_date());
+            createTransactionQuery.setInt(1, user.getId());
+            createTransactionQuery.setInt(2, book.getId());
+            createTransactionQuery.setDate(3, new java.sql.Date(result.getBorrow_date().getTime()));
+            createTransactionQuery.setDate(4, new java.sql.Date(result.getReturn_date().getTime()));
+            // If the actual return date is null
+            if (result.getActual_return_date() != null) {
+                createTransactionQuery.setDate(5, new java.sql.Date(result.getActual_return_date().getTime()));
+            } else {
+                createTransactionQuery.setDate(5, new java.sql.Date(System.currentTimeMillis()));
+            }
 
             createTransactionQuery.executeUpdate();
 
@@ -378,7 +383,14 @@ public class MyJDBC {
         return result;
     }
 
-    public static void isBookAvailable(boolean response, int index) {
+    /**
+     * 
+     * Set the availability of the book when it is rented or when it is return
+     * 
+     * @param response
+     * @param index
+     */
+    public static void setAvailability(boolean response, int index) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement changeAvailabilityQuery = connection.prepareStatement(
@@ -391,5 +403,122 @@ public class MyJDBC {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 
+     * Fetch the users book transactions
+     * 
+     * @param currentUser
+     * @return
+     */
+    public static List<Transaction> fetchTransactions(User currentUser) {
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement fetchTransaction = connection.prepareStatement(
+                "SELECT * FROM transactions WHERE user_id=?"
+            );
+
+            fetchTransaction.setInt(1, currentUser.getId());
+
+            ResultSet resultSet = fetchTransaction.executeQuery();
+
+            List<Transaction> fetchedTransactions = new ArrayList<>();
+
+            while (resultSet.next()) {
+                int transaction_id = resultSet.getInt("transaction_id");
+                int user_id = resultSet.getInt("user_id");
+                int book_id = resultSet.getInt("book_id");
+                Date borrow_date = resultSet.getDate("borrow_date");
+                Date return_date = resultSet.getDate("return_date");
+                Date actual_return_date = resultSet.getDate("actual_return_date");
+
+                User user = fetchUserById(user_id);
+                Book book = fetchBookById(book_id);
+
+                Transaction transaction = new Transaction(transaction_id, user, book, borrow_date, return_date, actual_return_date);
+                // Book book = new Book(book_id ,title, author, isbn, published_year, is_available);
+
+                fetchedTransactions.add(transaction);
+            }
+
+            return fetchedTransactions;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * 
+     * This method is used to fetch the user by id in the database to ensure the data structure
+     * 
+     * @param user_id
+     * @return
+     */
+    public static User fetchUserById(int user_id) {
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement fetchUser = connection.prepareStatement(
+                "SELECT * FROM users WHERE id=?"
+            );
+
+            fetchUser.setInt(1, user_id);
+            ResultSet resultset = fetchUser.executeQuery();
+            
+            if (resultset.next()) {
+
+                String username = resultset.getString("username");
+                String email = resultset.getString("email");
+                String password = resultset.getString("password");
+                String phone = resultset.getString("phone");
+                String permissionStr = resultset.getString("permission");
+                Permission permission = Permission.valueOf(permissionStr);
+                Date account_created = resultset.getDate("account_created");
+
+                return new User(user_id, username, email, password, phone, permission, account_created);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    /**
+     * 
+     * This method is used to fetch the book by id in the database to ensure the data structure
+     * 
+     * @param book_id
+     * @return
+     */
+    private static Book fetchBookById(int book_id) {
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement fetchUser = connection.prepareStatement(
+                "SELECT * FROM books WHERE book_id=?"
+            );
+
+            fetchUser.setInt(1, book_id);
+            ResultSet resultset = fetchUser.executeQuery();    
+            
+            if (resultset.next()) {
+
+                String title = resultset.getString("title");
+                String author = resultset.getString("author");
+                String isbn = resultset.getString("isbn");
+                int published_year = resultset.getInt("published_year");
+                boolean is_available = resultset.getBoolean("is_available");
+
+                return new Book(book_id, title, author, isbn, published_year, is_available);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }
