@@ -1,24 +1,24 @@
 package library_management.Gui;
 
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JOptionPane;
+
 import library_management.Interfaces.Data;
 import library_management.Obj.Book;
 import library_management.Obj.MyJDBC;
 import library_management.Obj.Transaction;
 import library_management.Obj.User;
-
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.SwingConstants;
-import javax.swing.JButton;
 
 public class RentedList extends BaseFrame implements Data{
 
@@ -69,6 +69,58 @@ public class RentedList extends BaseFrame implements Data{
             
         });
         add(backButton);
+        
+        // return book button
+        JButton returnButton = new JButton("Return book");                                                                                                                                                 
+        returnButton.setBounds(getWidth() - 450, getHeight() - 590, 400, 30);
+        returnButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Check if book is selected
+                if (displayTransactionList.getSelectedIndex() != -1) {
+                    // Store temporarily the transaction
+                    Transaction transaction = displayTransactionList.getSelectedValue();
+
+                    // Show confirmation message
+                    int response = JOptionPane.showConfirmDialog(
+                        null,
+                        "Are you sure you want to return this book?",
+                        "Confirm selection",
+                        JOptionPane.YES_NO_OPTION
+                    );
+
+                    // Do action
+                    if (response == JOptionPane.YES_OPTION) {
+                        // Fetch transaction user storage
+                        User transactionUser = MyJDBC.fetchUserById(3);
+
+                        // Add return date
+                        transaction.setActual_return_date(new Date(System.currentTimeMillis()));
+                        transaction.setUser(transactionUser);
+
+                        // Set available
+                        Book book = transaction.getBook();
+                        book.set_available(true);
+                        // Add in database
+                        MyJDBC.setAvailability(true, book.getId());
+
+                        // Store in database
+                        if (MyJDBC.confirmTransaction(transaction)) {
+                            // Show confirmatin message
+                            JOptionPane.showMessageDialog(RentedList.this, book.getTitle() + "has been returned");
+                        }
+
+                        DisplayData();
+                    }
+                } else {
+                    // Show error message
+                    JOptionPane.showMessageDialog(RentedList.this, "A book must be selected");
+                }
+            }
+            
+        });
+        add(returnButton);
     }
 
     @Override

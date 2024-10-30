@@ -361,12 +361,8 @@ public class MyJDBC {
             createTransactionQuery.setInt(2, book.getId());
             createTransactionQuery.setDate(3, new java.sql.Date(result.getBorrow_date().getTime()));
             createTransactionQuery.setDate(4, new java.sql.Date(result.getReturn_date().getTime()));
-            // If the actual return date is null
-            if (result.getActual_return_date() != null) {
-                createTransactionQuery.setDate(5, new java.sql.Date(result.getActual_return_date().getTime()));
-            } else {
-                createTransactionQuery.setDate(5, new java.sql.Date(System.currentTimeMillis()));
-            }
+            createTransactionQuery.setNull(5, java.sql.Types.DATE);
+           
 
             createTransactionQuery.executeUpdate();
 
@@ -437,7 +433,6 @@ public class MyJDBC {
                 Book book = fetchBookById(book_id);
 
                 Transaction transaction = new Transaction(transaction_id, user, book, borrow_date, return_date, actual_return_date);
-                // Book book = new Book(book_id ,title, author, isbn, published_year, is_available);
 
                 fetchedTransactions.add(transaction);
             }
@@ -494,7 +489,7 @@ public class MyJDBC {
      * @param book_id
      * @return
      */
-    private static Book fetchBookById(int book_id) {
+    public static Book fetchBookById(int book_id) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement fetchUser = connection.prepareStatement(
@@ -521,4 +516,30 @@ public class MyJDBC {
         
         return null;
     }
+
+    public static boolean confirmTransaction (Transaction transaction) {
+        boolean result = false;
+
+        try {
+            // Conection to the databse
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            PreparedStatement confirmTransaction = connection.prepareStatement(
+                "UPDATE transactions SET user_id=?, actual_return_date=? WHERE transaction_id=?"
+            );
+
+            // Set the custom variable
+            confirmTransaction.setInt(1, 3);
+            confirmTransaction.setDate(2, new java.sql.Date(transaction.getActual_return_date().getTime()));
+            confirmTransaction.setInt(3, transaction.getTransaction_id());
+
+            confirmTransaction.executeUpdate();
+
+            result = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    
 }

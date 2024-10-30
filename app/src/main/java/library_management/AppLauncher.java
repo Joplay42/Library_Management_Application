@@ -14,8 +14,7 @@ public class AppLauncher {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    //new LoginPage().setVisible(true);
-                    new LibraryApp("Library_management app", new User(2, "Jonathan", null, null, null, Permission.admin, null)).setVisible(true);
+                    new LoginPage().setVisible(true);
                 }
             });
         }
