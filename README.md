@@ -1,18 +1,11 @@
 ## Bienvenue à mon application de gestion de librairie
 
+Voici mon projet pour la gestion de librairie, écrit en Java en utilisant l'outil Graddle pour la compilation. Cette application possède un système d'authentification d'utilisateur en stockant les données dans une base de donnée SQL. Un encryption de mot de passe ainsi que des actions CRUD permet de modifier et ajouter des données. L'interface utilisant la librairie JFrame offre une interface utilisateur simple et efficace.
 
+## Différent rôle d'utilisateur
 
-## Folder Structure
+L'application offre un système d'administrateur ainsi que d'utilisateur régulier. L'administrateur peut modifier et supprimer les livres disponibles pour les utilisateurs. De plus, l'utilisateur peut réservé certain livre avec une date d'expiration.
 
-The workspace contains two folders by default, where:
+## Opération CRUD
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Grâce à l'utilisation d'une base de donnée SQL, l'application fait des opérations CRUD afin de modifier, supprimer et ajouter des données dans la base de donnée. De plus, du SQL est utiliser pour faire des requêtes dnas l'application.
