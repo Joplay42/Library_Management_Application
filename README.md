@@ -14,4 +14,4 @@ Afin que vos données utilisateur reste en sécurité, un système d'encryption 
 
 ### Gestion administrateur 🚨
 
-Un administrateur peut être créé au besoin afin d'assurer l'intégrité des données.
+Un administrateur peut être créé au besoin afin d'assurer l'intégrité des données. L'administrateur peut ajouter, supprimer et modifier des livres dans la base de donnée. Restez donc à l'affut des nouvelles parution!
